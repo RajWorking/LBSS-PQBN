@@ -1,12 +1,13 @@
 import numpy as np
 from scipy.linalg import orth, solve_triangular
 
+
 def trapdoor_sampling(n, f):
     # Generate a random n x n matrix A
     A = np.random.randn(n, n)
 
     # Transform f into g using A
-    g = lambda x: f(A.dot(x))
+    def g(x): return f(A.dot(x))
 
     # Sample n vectors from the distribution defined by g
     u = np.array([g(np.random.randn(n)) for i in range(n)])
@@ -22,6 +23,7 @@ def trapdoor_sampling(n, f):
     t = B.dot(A_inv) % q
 
     return B, t
+
 
 def sample_d(B, sigma, seed):
     # Set the random seed
@@ -66,20 +68,22 @@ def ExtBasis(S, A, A_tilde):
     # Combine A and A_tilde into a single matrix A_0
     A_0 = np.hstack((A, A_tilde))
 
+    m = S.shape[0]
+
     # Initialize the extended basis S_0 with S
     S_0 = np.hstack((S, np.zeros((m, m_tilde))))
-    
+
     # Loop over the columns of A_0 in some order (e.g., increasing order)
     for j in range(m+m_tilde):
-        
+
         # Compute the Gram-Schmidt orthogonalization of the columns of S_0 and A_0 up to column j
-        B = np.hstack((S_0, A_0[:,:j+1]))
-        mu = np.linalg.inv(B.T @ B) @ B.T @ A_0[:,j]
-        v = A_0[:,j] - B @ mu
-        
+        B = np.hstack((S_0, A_0[:, :j+1]))
+        mu = np.linalg.inv(B.T @ B) @ B.T @ A_0[:, j]
+        v = A_0[:, j] - B @ mu
+
         # Check if the norm of the last orthogonal vector is greater than some threshold
         if np.linalg.norm(v) > 2**(n/2):
             # Add v to the extended basis S_0
-            S_0 = np.hstack((S_0, v.reshape((-1,1))))
-    
+            S_0 = np.hstack((S_0, v.reshape((-1, 1))))
+
     return S_0
