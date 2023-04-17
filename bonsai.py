@@ -58,8 +58,11 @@ def HNF(S):
     hnf = hermite_normal_form(mat)
     return np.array(hnf.tolist()).astype(np.int32)
 
-def ToBasis(S:np.matrix, B:np.matrix)
-
+def ToBasis(S:np.matrix, B:np.matrix):
+    Q = np.linalg.inv(B) @ S
+    # find an unimodular matrix U such that T = UQ is upper triangular
+    Uinv, T = np.linalg.qr(Q)
+    return B @ Uinv
 
 def RandBasis(S: np.matrix, s: int) -> np.matrix:
     """
