@@ -72,8 +72,7 @@ def ExtBasis(S: np.matrix, A: np.matrix, A_bar: np.matrix) -> np.matrix:
 
     I = np.eye(m_bar)
     S_prime[m:, m:] = I
-
-    # TODO: might need pseudoinverse here
+    # might need pseudoinverse here
     W = np.linalg.inv(A) @ (-A_bar)
 
     S_prime[0:m, m:] = W
