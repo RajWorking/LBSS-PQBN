@@ -10,7 +10,6 @@ from utils import HNF
 # The bonsai tree is a hierarchy of trapdoor functions.
 
 
-<<<<<<< HEAD
 def ToBasis(S:np.matrix, B:np.matrix):
     # deterministic poly-time algorithm that, given a full-rank set (not necessarily a basis) S
     # of lattice vectors in Λ = L(B), outputs a basis T of Λ such that |t~_i | ≤ |s~_i| for all i.
@@ -19,10 +18,6 @@ def ToBasis(S:np.matrix, B:np.matrix):
     # find an unimodular matrix U such that T = UQ is upper triangular
     Uinv, T = np.linalg.qr(Q)
     return B @ Uinv
-=======
-def ToBasis(S:np.matrix, B:np.matrix)
-
->>>>>>> some changes
 
 def RandBasis(S: np.matrix, s: int) -> np.matrix:
     """
@@ -37,10 +32,7 @@ def RandBasis(S: np.matrix, s: int) -> np.matrix:
     V = np.zeros((m, m))
     i = 0
     while i < m:
-<<<<<<< HEAD
         # TODO: is c random?
-=======
->>>>>>> some changes
         c = np.random.randint(0, 100, size=(m, 1))
         v = SampleD(S, s, c)
         # check if v is linearly independent of vis
