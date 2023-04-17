@@ -58,6 +58,8 @@ def HNF(S):
     hnf = hermite_normal_form(mat)
     return np.array(hnf.tolist()).astype(np.int32)
 
+def ToBasis(S:np.matrix, B:np.matrix)
+
 
 def RandBasis(S: np.matrix, s: int) -> np.matrix:
     """
@@ -70,41 +72,45 @@ def RandBasis(S: np.matrix, s: int) -> np.matrix:
     """
     m = S.shape[0]
     V = np.zeros((m, m))
-    for i in range(m):
-        while True:
-            c = np.random.randint(0, 100, size=(m, 1))
-            v = SampleD(S, s, c)
-            # check if v is linearly independent of vis
-            Vprime = np.concatenate((V, v), axis=0)
-            if np.linalg.matrix_rank(Vprime) == i + 1:
-                V[i] = v
-                break
+    i = 0
+    while i < m:
+        c = np.random.randint(0, 100, size=(m, 1))
+        v = SampleD(S, s, c)
+        # check if v is linearly independent of vis
+        Vprime = np.concatenate((V, v), axis=0)
+        if np.linalg.matrix_rank(Vprime) == i + 1:
+            V[i] = v
+            break
     return ToBasis(V, HNF(S))
 
 
-def ExtBasis(S: np.matrix, A: np.matrix, A_prime: np.matrix) -> np.matrix:
+def ExtBasis(S: np.matrix, A: np.matrix, A_bar: np.matrix) -> np.matrix:
     """
     ExtBasis Algorithm
     The probabilistic polynomial-time algorithm ExtBasis(S, A, A') takes a basis S of an m-dimensional integer
     lattice Λ, a matrix A ∈ Z^{m × m_tilde}, and a matrix A' ∈ Z^{m × m_tilde}, and outputs a basis S' of Λ, generated as follows.
     There is a deterministic polynomial-time algorithm ExtBasis with the following properties:
-    1. If A is invertible, then ExtBasis(S, A, A') outputs a basis S' of Λ such that S' = S ∪ {A'v : v ∈ S}.
-    2. If A is not invertible, then ExtBasis(S, A, A') outputs a basis S' of Λ such that S' = S ∪ {A'v : v ∈ S} ∪ {A'Av : v ∈ S}.
+
+    Args:
+        S: A basis of an m-dimensional integer lattice Λ
+        A: A matrix A ∈ Z^{n × m}
+        A_bar: A matrix A' ∈ Z^{n × m_tilde}
+
+    Returns:
     """
     m = S.shape[0]
-    m_tilde = A_prime.shape[1]
-    m_prime = m + m_tilde
+    m_bar = A_bar.shape[1]
+    m_prime = m + m_bar
 
     S_prime = np.zeros((m_prime, m_prime))
     S_prime[:m, :m] = S
 
-    I = np.eye(m_tilde)
+    I = np.eye(m_bar)
     S_prime[m:, m:] = I
+    # might need pseudoinverse here
+    W = np.linalg.inv(A) @ (-A_bar)
 
-    W = np.linalg.inv(A) @ (-A_prime)
-
-    for i in range(m_tilde):
-        S_prime[m + i, :m] = W[i, :]
+    S_prime[0:m, m:] = W
     return S_prime
 
 
