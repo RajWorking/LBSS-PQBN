@@ -1,6 +1,7 @@
 import unittest
 from prelims import *
 from SampleD import SampleD
+from bonsai import HNF
 
 class TestStringMethods(unittest.TestCase):
 
@@ -15,6 +16,11 @@ class TestStringMethods(unittest.TestCase):
 
         sample = SampleD(B, s, c)
         print("Sampled vector: ", sample)
+    
+    def test_HNF(self):
+        S = np.array([[12, 6, 4], [3, 9, 6], [2, 16, 14]])
+        H = np.array([[10, 0, 2], [0, 15, 3], [0, 0, 2]])
+        assert np.allclose(HNF(S), H)
 
 
 if __name__ == '__main__':

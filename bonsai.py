@@ -2,7 +2,7 @@ import numpy as np
 import sympy
 from sympy.matrices.normalforms import hermite_normal_form
 
-from .SampleD import SampleD
+from SampleD import SampleD
 
 
 
