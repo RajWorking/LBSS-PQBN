@@ -2,7 +2,10 @@ import unittest
 from prelims import *
 from SampleD import SampleD
 from bonsai import HNF
+<<<<<<< HEAD
 
+=======
+>>>>>>> Moved tests to common place
 
 class TestStringMethods(unittest.TestCase):
 
