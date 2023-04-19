@@ -69,7 +69,7 @@ def Algorithm_1(A1):
     for i, width in enumerate(widths):
         row += width
         U[row - 1][row] = 0
-    
+
     U[row:, row:] = np.identity(m2 - row).astype(int)
 
     ###
