@@ -2,6 +2,7 @@ import numpy as np
 import scipy as sc
 from config import *
 
+# debug
 np.set_printoptions(threshold=np.inf, linewidth=100000)
 
 
@@ -24,7 +25,7 @@ def Algorithm_1(A1):
         S (np.ndarray): integer (modulo q) matrix of dimensions m x m
     '''
     # TODO: compute H
-    # H = (A1.T @ A1) % q  # HNF(A1)
+    H = A1[:m1, :m1]  # HNF(A1)
     H = np.random.choice([1, 2], (m1, m1), [0.75, 0.25])
 
     # Construction of C
@@ -56,10 +57,22 @@ def Algorithm_1(A1):
                              (2**np.arange(width))) > 0).T.astype(int)
         row += width
 
-    print(G@P - H_)
+    # print(G@P - H_)
 
     # Construction of U
-    U = np.zeros((m2, m2))
+    t = np.zeros(m2).astype(int)
+    t[:2] = [1, -2]
+    U = sc.linalg.circulant(t).T
+    U[-1][0] = 0
+
+    row = 0
+    for i, width in enumerate(widths):
+        row += width
+        U[row - 1][row] = 0
+    
+    U[row:, row:] = np.identity(m2 - row).astype(int)
+
+    ###
 
     A2 = (-(A1 @ (R + G))) % q
 
