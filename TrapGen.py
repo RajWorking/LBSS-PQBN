@@ -26,6 +26,7 @@ def Algorithm_1(A1):
     # TODO: compute H
     H = A1[:m1, :m1]  # HNF(A1)
 
+    # Construction of G
     G = np.zeros((m1, m2))
     widths = np.ceil(np.log2(np.diagonal(H))).astype(int)
 
@@ -38,13 +39,19 @@ def Algorithm_1(A1):
     w = 2 ** math.floor(math.log2(m2 - 2 * n * math.log2(q)))
     C_ = 1e4
     G[:, col: col+w] = sc.linalg.hadamard(w)[:m1]
-
-    print(G)
-
-    U = np.zeros((m2, m2))
-    R = np.zeros((m1, m2))
-    P = np.zeros((m2, m1))
+    
+    # Construction of R
+    R = np.random.choice([-1, 0, 1], (m1, m2), [0.25, 0.5, 0.25])
+    
+    # Construction of C
     C = np.identity(m1).astype(int)
+
+    # Construction of P
+    P = np.zeros((m2, m1))
+
+    # Construction of U
+    U = np.zeros((m2, m2))
+
 
     A2 = (-(A1 @ (R + G))) % q
 
