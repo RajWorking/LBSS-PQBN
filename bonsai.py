@@ -13,6 +13,7 @@ from utils import HNF
 def ToBasis(S:np.matrix, B:np.matrix):
     # deterministic poly-time algorithm that, given a full-rank set (not necessarily a basis) S
     # of lattice vectors in Λ = L(B), outputs a basis T of Λ such that |t~_i | ≤ |s~_i| for all i.
+    # TODO: Verify this logic works
     Q = np.linalg.inv(B) @ S
     # find an unimodular matrix U such that T = UQ is upper triangular
     Uinv, T = np.linalg.qr(Q)
@@ -31,13 +32,14 @@ def RandBasis(S: np.matrix, s: int) -> np.matrix:
     V = np.zeros((m, m))
     i = 0
     while i < m:
+        # TODO: is c random?
         c = np.random.randint(0, 100, size=(m, 1))
         v = SampleD(S, s, c)
         # check if v is linearly independent of vis
         Vprime = np.concatenate((V, v), axis=0)
         if np.linalg.matrix_rank(Vprime) == i + 1:
             V[i] = v
-            break
+            i += 1
     return ToBasis(V, HNF(S))
 
 
@@ -64,7 +66,8 @@ def ExtBasis(S: np.matrix, A: np.matrix, A_bar: np.matrix) -> np.matrix:
 
     I = np.eye(m_bar)
     S_prime[m:, m:] = I
-    # might need pseudoinverse here
+    
+    # TODO: might need pseudoinverse here
     W = np.linalg.inv(A) @ (-A_bar)
 
     S_prime[0:m, m:] = W
