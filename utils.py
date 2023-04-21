@@ -16,13 +16,13 @@ def dual_lattice_basis(A):
     Find basis of lattice L = {x | Ax = 0 mod q}
     '''
     n, m = A.shape
-    mat = Matrix(A)   
+    mat = Matrix(A)
     mat = np.array(mat.nullspace())[:, :, 0].T
     mat = matrix_rational_to_integer(mat)
     mat = np.append(mat, q*np.identity(m).astype(int), axis=1)
     assert np.sum((A @ mat) % q) == 0
     return HNF(mat)
-    
+
 
 def HNF(B):
     # Compute Hermite Normal Form of a lattice using basis B
