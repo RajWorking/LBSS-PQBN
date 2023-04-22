@@ -3,15 +3,17 @@ Define all security parameters here
 '''
 import math
 
-n = 512
+n = 32
 
-# large prime number
-q = 28468961266298161708283942383236250722126064247639
+# prime number
+q = 40237 # 822220415899
 
-m = int(2 * n * math.log2(q))
+delta = 1
+m1 = math.ceil((1 + delta) * n * math.log2(q))
+m2 = math.ceil((4 + 2*delta) * n * math.log2(q))
+m = m1 + m2
 
 # Gaussian parameter
 s = int(math.sqrt(n * math.log2(n) * math.log2(q)))
 
-# print(n, q, m, s)
-
+print(n, m, m1, m2, s, q)

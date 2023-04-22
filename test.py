@@ -3,13 +3,14 @@ from prelims import *
 from SampleD import SampleD
 from bonsai import HNF
 
+
 class TestStringMethods(unittest.TestCase):
 
     # def test_trapdoor_sampling(self):
     #     B, t = trapdoor_sampling()
 
     def test_SampleD(self):
-        
+
         B = np.arange(100, 100 + 7*7).reshape((7, 7))
         s = 6599879
         c = np.arange(13, 13 + 7)
