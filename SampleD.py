@@ -1,6 +1,5 @@
 import numpy as np
 import math
-from numpy.linalg import norm
 
 
 def SampleZ(n, s, c):
@@ -25,7 +24,7 @@ def SampleZ(n, s, c):
 
 def SampleD(B, s, c):
     """
-    A nearest-plane algorithm that samples from a discrete Gaussian D_Λ,s,c over any lattice Λ. 
+    A nearest-plane algorithm that samples from a discrete Gaussian D_Λ,s,c over any lattice Λ.
     In each iteration, the algorithm simply chooses a plane at random by sampling from an appropriate discrete Gaussian over the integers Z.
     Assuming scalar operations take unit time, the running time of the algorithm is O(n^2) plus the running time of the n oracle calls.
 
@@ -41,6 +40,7 @@ def SampleD(B, s, c):
     n = len(c)
     v = np.zeros(n)
 
+    print(B.shape)
     # Gram-Schmidt Decomposition of basis B
     B_gs, _ = np.linalg.qr(B)
 

@@ -1,17 +1,21 @@
+import math
+from typing import Tuple
+
 import numpy as np
 import scipy as sc
-from config import *
 
 # debug
 np.set_printoptions(threshold=np.inf, linewidth=100000)
 
 
-def TrapGen():
+def TrapGen(n, q, delta=1) -> Tuple:
+    m1 = math.ceil((1 + delta) * n * math.log2(q))
+    m2 = math.ceil((4 + 2*delta) * n * math.log2(q))
     A1 = np.random.randint(q, size=(n, m1))
-    return Algorithm_1(A1)
+    return Algorithm_1(A1, n, q, m1, m2)
 
 
-def Algorithm_1(A1):
+def Algorithm_1(A1, n, q, m1, m2) -> Tuple:
     '''
     Refer Algorithm 1 on Page 10 of paper - Generating Shorter Bases for Hard Random Lattices
     Framework for constructing A ∈ Z_nxm q and basis S of orthogonal lattice to A
@@ -76,6 +80,8 @@ def Algorithm_1(A1):
 
     A2 = (-(A1 @ (R + G))) % q
 
+    m = m1 + m2
+
     S = np.zeros((m, m))
     S[:m1, :m2] = (G + R)@U
     S[m1:, :m2] = U
@@ -86,5 +92,3 @@ def Algorithm_1(A1):
     A = np.append(A1, A2, axis=1)
     return A, S
 
-
-TrapGen()
