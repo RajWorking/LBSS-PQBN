@@ -6,7 +6,7 @@ import math
 n = 32
 
 # prime number
-q = 40237 # 822220415899
+q = 101 # 40237 # 822220415899
 
 delta = 1
 m1 = math.ceil((1 + delta) * n * math.log2(q))
