@@ -1,7 +1,7 @@
 import numpy as np
 
-from SampleD import SampleD
-from utils import HNF
+from SampleD import SampleD, SampleZ
+from utils import HNF, solve_lineareqn
 
 
 # The bonsai tree form the paper: Bonsai Trees, or How to Delegate a Lattice Basis
@@ -75,9 +75,52 @@ def ExtBasis(S: np.matrix, A: np.matrix, A_bar: np.matrix) -> np.matrix:
     I = np.eye(m_bar)
     S_prime[m:, m:] = I
     # might need pseudoinverse here
+    print(A.shape, A_bar.shape)
     W = np.linalg.pinv(A) @ (-A_bar)
 
+    print(W)
     print(f"{W.shape}")
 
     S_prime[0:m, m:] = W
     return S_prime
+
+
+def OptimizedGaussianSampling(S: np.matrix,
+                              A: np.matrix,
+                              A_bar: np.matrix,
+                              c: np.array,
+                              q: int,
+                              s: int) -> np.matrix:
+    n = A.shape[0]
+    m = S.shape[0]
+    m_bar = A_bar.shape[1]
+    # print(S.shape, A.shape, A_bar.shape)
+    v_bar = np.array([SampleZ(s, 0, n) for _ in range(m_bar)])
+    y = (-A_bar @ v_bar) % q
+    # center for sampleD
+    t = solve_lineareqn(A, y, q)
+    e = SampleD(S, s, (-t) % q, n)
+    v = e + t
+    v_prime = np.concatenate((v, v_bar), axis=0) % q
+    return v_prime
+
+
+def OptimizedRandBasis(S: np.matrix,
+                       A: np.matrix,
+                       A_bar: np.matrix,
+                       q: np.matrix,
+                       s: int):
+    n = A.shape[0]
+    m = S.shape[0]
+    V = np.zeros((m, m))
+    i = 0
+    while i < m:
+        c = np.zeros(n)
+        v = OptimizedGaussianSampling(S, A, A_bar, c, q, s)
+        # check if v is linearly independent of vis
+        Vprime = np.concatenate((V, v), axis=0)
+        # print(Vprime.shape)
+        if np.linalg.matrix_rank(Vprime) == i + 1:
+            V[i] = v
+            i += 1
+    return ToBasis(V, HNF(S))

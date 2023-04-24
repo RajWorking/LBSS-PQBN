@@ -4,10 +4,10 @@ Define all security parameters here
 import math
 from signature import LBSS
 
-n = 32
+n = 8
 
 # prime number
-q = 101  # 822220415899
+q = 2**(n *2) + 1 
 
 delta = 1
 m1 = math.ceil((1 + delta) * n * math.log2(q))
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     lbss = LBSS(n, q, s, m, delta)
     print("Generating Keys")
     keys = lbss.gen()
-    pk, sk = keys[0]
+    pk, sk = keys[4]
     print("Signing")
     sgn = lbss.sign(b'hello world', pk, sk)
     print("Verifying")

@@ -5,7 +5,7 @@ import numpy as np
 import scipy as sc
 
 # debug
-np.set_printoptions(threshold=np.inf, linewidth=100000)
+# np.set_printoptions(threshold=np.inf, linewidth=100000)
 
 
 def TrapGen(n, q, delta=1) -> Tuple:
@@ -90,5 +90,6 @@ def Algorithm_1(A1, n, q, m1, m2) -> Tuple:
     # S %= q
 
     A = np.append(A1, A2, axis=1)
+    S = S.astype(int)
     return A, S
 
