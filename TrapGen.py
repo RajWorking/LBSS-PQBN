@@ -81,7 +81,7 @@ def Algorithm_1(A1):
     S[m1:, :m2] = U
     S[:m1, m2:] = R@P - C
     S[m1:, m2:] = P
-    S %= q
+    # S %= q
 
     A = np.append(A1, A2, axis=1)
     return A, S
