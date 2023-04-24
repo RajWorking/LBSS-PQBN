@@ -1,7 +1,6 @@
 import unittest
-from prelims import *
 from SampleD import SampleD
-from bonsai import HNF
+from utils import *
 
 
 class TestStringMethods(unittest.TestCase):
@@ -22,6 +21,12 @@ class TestStringMethods(unittest.TestCase):
         S = np.array([[12, 6, 4], [3, 9, 6], [2, 16, 14]])
         H = np.array([[10, 0, 2], [0, 15, 3], [0, 0, 2]])
         assert np.allclose(HNF(S), H)
+        
+    def test_dual_lattice_basis(self):
+        nA = 3
+        mA = 7
+        A = np.random.randint(10, size=nA*mA).reshape(nA, mA)
+        D = dual_lattice_basis(A)
 
 
 if __name__ == '__main__':

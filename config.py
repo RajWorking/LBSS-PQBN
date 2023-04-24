@@ -16,4 +16,4 @@ m = m1 + m2
 # Gaussian parameter
 s = int(math.sqrt(n * math.log2(n) * math.log2(q)))
 
-print(n, m, m1, m2, s, q)
+# print(n, m, m1, m2, s, q)
