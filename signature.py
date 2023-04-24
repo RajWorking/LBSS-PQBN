@@ -21,7 +21,6 @@ class LBSS:
         assert (m >= n)
         self.hash_fn = hash_fn
         self.A0, self.T_A0 = TrapGen(self.n, self.q, trapgen_delta)
-        print(self.A0)
         assert self.A0.shape == (n, m)
         assert self.T_A0.shape == (m, m)
         self.s: int = s

@@ -15,7 +15,6 @@ def SampleZ(s, c, n) -> int:
         int : Sampled integer from the discrete Gaussian distribution over integers.
     """
     while True:
-        # print(c, s * math.log(n))
         x = np.random.randint(math.ceil(- s * math.log(n)),
                               math.ceil( s * math.log(n)))
         x += int(c)
@@ -42,19 +41,13 @@ def SampleD(B, s, c, n):
     m:int = len(c)
     v = np.zeros(m, dtype=int)
 
-    # print(c)
     # Gram-Schmidt Decomposition of basis B
     B_gs, _ = np.linalg.qr(B)
 
     for i in range(m-1, -1, -1):
         c_ = np.dot(c, B_gs[i]) # float
         z = SampleZ(s, c_, n)
-        # print(z, max(B[i]))
-        # input()
-        # print(type(z), B.dtype)
         c -= z * B[i]
         v += z * B[i]
-
-    print(v)
 
     return v

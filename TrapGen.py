@@ -4,6 +4,8 @@ from typing import Tuple
 import numpy as np
 import scipy as sc
 
+from utils import *
+
 # debug
 # np.set_printoptions(threshold=np.inf, linewidth=100000)
 
@@ -28,8 +30,7 @@ def Algorithm_1(A1, n, q, m1, m2) -> Tuple:
         A2 (np.ndarray): integer (modulo q) matrix of dimensions n x m2
         S (np.ndarray): integer (modulo q) matrix of dimensions m x m
     '''
-    # TODO: compute H
-    H = A1[:m1, :m1]  # HNF(A1)
+    H = dual_lattice_basis(A1)
     H = np.random.choice([1, 2], (m1, m1), [0.75, 0.25])
 
     # Construction of C
@@ -60,8 +61,6 @@ def Algorithm_1(A1, n, q, m1, m2) -> Tuple:
         P[row: row+width] = ((H_[i][None].T &
                              (2**np.arange(width))) > 0).T.astype(int)
         row += width
-
-    # print(G@P - H_)
 
     # Construction of U
     t = np.zeros(m2).astype(int)
