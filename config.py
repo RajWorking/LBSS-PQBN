@@ -5,6 +5,8 @@ import math
 
 n = 32
 
+security_param = 10
+
 # prime number
 q = 101 # 40237 # 822220415899
 

@@ -1,17 +1,24 @@
+import math
+from typing import Tuple
+
 import numpy as np
 import scipy as sc
-from config import *
+from sympy import *
+
+from utils import *
 
 # debug
 np.set_printoptions(threshold=np.inf, linewidth=100000)
 
 
-def TrapGen():
+def TrapGen(n, q, delta=1) -> Tuple:
+    m1 = math.ceil((1 + delta) * n * math.log2(q))
+    m2 = math.ceil((4 + 2*delta) * n * math.log2(q))
     A1 = np.random.randint(q, size=(n, m1))
-    return Algorithm_1(A1)
+    return Algorithm_1(A1, n, q, m1, m2)
 
 
-def Algorithm_1(A1):
+def Algorithm_1(A1, n, q, m1, m2) -> Tuple:
     '''
     Refer Algorithm 1 on Page 10 of paper - Generating Shorter Bases for Hard Random Lattices
     Framework for constructing A ∈ Z_nxm q and basis S of orthogonal lattice to A
@@ -24,9 +31,7 @@ def Algorithm_1(A1):
         A2 (np.ndarray): integer (modulo q) matrix of dimensions n x m2
         S (np.ndarray): integer (modulo q) matrix of dimensions m x m
     '''
-    # TODO: compute H
-    H = A1[:m1, :m1]  # HNF(A1)
-    H = np.random.choice([1, 2], (m1, m1), [0.75, 0.25])
+    H = dual_lattice_basis(A1, q)
 
     # Construction of C
     C = np.identity(m1).astype(int)
@@ -57,8 +62,6 @@ def Algorithm_1(A1):
                              (2**np.arange(width))) > 0).T.astype(int)
         row += width
 
-    # print(G@P - H_)
-
     # Construction of U
     t = np.zeros(m2).astype(int)
     t[:2] = [1, -2]
@@ -69,12 +72,14 @@ def Algorithm_1(A1):
     for i, width in enumerate(widths):
         row += width
         U[row - 1][row] = 0
-    
+
     U[row:, row:] = np.identity(m2 - row).astype(int)
 
     ###
 
     A2 = (-(A1 @ (R + G))) % q
+
+    m = m1 + m2
 
     S = np.zeros((m, m))
     S[:m1, :m2] = (G + R)@U
@@ -84,7 +89,6 @@ def Algorithm_1(A1):
     # S %= q
 
     A = np.append(A1, A2, axis=1)
+    S = S.astype(int)
     return A, S
 
-
-TrapGen()
