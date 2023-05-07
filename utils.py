@@ -37,18 +37,33 @@ def solve_lineareqn(A, b, q):
     A * x = b mod q
     '''
     nA, mA = A.shape
-    b = b.reshape(nA, 1)
-    x = np.zeros(mA, dtype=int)
+    _, mb = b.shape
+    
+    x = np.zeros(shape=(mA, mb), dtype=int)
     mat = Matrix(A[:, :nA])
-    x[:nA] = matrix_rational_to_integer((mat ** -1) * b, q).flatten()
+    x[:nA] = matrix_rational_to_integer((mat ** -1) * b, q)
 
-    assert np.all((A @ x) % q == b.flatten())
+    assert np.all((A @ x) % q == b % q)
     return x
+
+def gram_schmidt(A):
+    '''
+    Gram-Schmidt orthogonalization column-wise of matrix A
+    '''
+    n, m = A.shape
+    B = np.zeros((n, m))
+    B[:, 0] = A[:, 0]
+    for i in range(1, m):
+        B[:, i] = A[:, i]
+        for j in range(i):
+            L = np.dot(A[:, i], B[:, j]) / np.dot(B[:, j], B[:, j])
+            B[:, i] -= L * B[:, j]
+    return B
 
 if __name__ == '__main__':
     n = 3
     m = 5
-    A = np.random.randint(10, size=n*m).reshape(n, m)
-    b = np.random.randint(10, size=n)
+    r = 4
+    A = np.random.randint(10, size=n*r).reshape(n, r)
+    b = np.random.randint(10, size=n*m).reshape(n, m)
     x = solve_lineareqn(A, b, config.q)
-    print(x)

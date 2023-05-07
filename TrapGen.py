@@ -3,11 +3,12 @@ from typing import Tuple
 
 import numpy as np
 import scipy as sc
+from sympy import *
 
 from utils import *
 
 # debug
-# np.set_printoptions(threshold=np.inf, linewidth=100000)
+np.set_printoptions(threshold=np.inf, linewidth=100000)
 
 
 def TrapGen(n, q, delta=1) -> Tuple:
@@ -30,8 +31,7 @@ def Algorithm_1(A1, n, q, m1, m2) -> Tuple:
         A2 (np.ndarray): integer (modulo q) matrix of dimensions n x m2
         S (np.ndarray): integer (modulo q) matrix of dimensions m x m
     '''
-    H = dual_lattice_basis(A1)
-    H = np.random.choice([1, 2], (m1, m1), [0.75, 0.25])
+    H = dual_lattice_basis(A1, q)
 
     # Construction of C
     C = np.identity(m1).astype(int)
